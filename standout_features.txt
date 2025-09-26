@@ -1,0 +1,15 @@
+🔔 Push notifications (mobile + web)
+
+📷 Media sharing (images, videos, voice messages)
+
+✅ Message status (delivered, read receipts, typing indicators)
+
+🧑‍🤝‍🧑 Group & private chats
+
+🔒 End-to-end encryption (even basic implementation shows security awareness)
+
+🌍 Scalable backend (Redis, Kafka, or Pub/Sub for message queues)
+
+📡 Cloud-native deployment (Docker + Kubernetes or serverless with AWS/GCP)
+
+🤖 AI-powered features (summarize chat, auto-translate, smart replies)

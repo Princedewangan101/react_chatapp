@@ -9,6 +9,7 @@ import bg from "../assets/bg.jpg";
 import Brand from '../components/Brand';
 
 
+
 const Homepage = () => {
 
     const [selectedUser, setSelectedUser] = useState(false)
@@ -42,6 +43,7 @@ const Homepage = () => {
                                 <div className="col-span-6 row-span-5 ">
                                     <Brand />
                                 </div>
+
                             </>)}
                     </div>
                 </div>

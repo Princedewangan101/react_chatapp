@@ -18,8 +18,7 @@ const Brand = () => {
     return (
         <section className='h-full bg-slate-700/25 flex flex-col justify-center pb-15 items-center gap-5'>
             <img src={logo} alt="" className='aspect-square w-30 ' />
-            {/* <h5 className=''>Chat with any one any time.</h5> */}
-
+            
 
             <div className="App font-bold text-xl">
                 <TypeIt key={key} options={{ speed: 100 }}>

@@ -6,7 +6,7 @@ import { formateMessageTime } from '../lib/utils';
 
 
 
-const Center = () => {
+const Center = ({ user }) => {
 
   const scrollEnd = useRef()
 
@@ -22,12 +22,12 @@ const Center = () => {
       <div className='flex justify-between items-center '>
         <div className=' flex items-center rounded-lg gap-3 px-2 py-2 ml-4  '>
           <img
-            src={assets.profile_martin}
+            src={user?.profilePic || assets.profile_martin}
             alt="profile"
             className='w-9 h-9 rounded-full '
           />
           <div className=' flex flex-col '>
-            <p className='text-sm'>Martin</p>
+            <p className='text-sm'>{user?.fullName || "Unknown User"}</p>
           </div>
         </div>
         <div className=' p-2 mr-2 rounded-full hover:bg-slate-900/40 '>

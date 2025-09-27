@@ -32,7 +32,7 @@ const Homepage = () => {
                                     <Center user={selectedUser} />
                                 </div>
                                 <div className="col-span-3 row-span-5 col-start-10 ">
-                                    <Rightsidebar />
+                                    <Rightsidebar user={selectedUser} />
                                 </div>
                             </>)
                             : (<>

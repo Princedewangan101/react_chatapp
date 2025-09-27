@@ -1,6 +1,6 @@
 import './App.css'
 import Homepage from './Pages/Homepage'
-import Loginpage from './Pages/Loginpage'
+import Auth_page from './Pages/Auth_page'
 import Profile from './Pages/Profile'
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       {/* <Homepage/> */}
-      <Loginpage/>
+      <Auth_page/>
       <Profile/>
     </>
   )

@@ -1,5 +1,4 @@
 // Sign-up new user
-
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 
@@ -79,15 +78,9 @@ export const loginUser = async (req, res) => {
     }
 };
 
-// Get all users (excluding passwords)
-export const getUsers = async (req, res) => {
-    try {
-        const users = await User.find().select("-password");
-        res.status(200).json(users);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error" });
-    }
+//Controller to check if user is authentication
+export const checkAuth = (req, res) => {
+    res.json({ succes: true, user: req.user });
 };
 
 // Update user profile
@@ -95,18 +88,29 @@ export const updateUser = async (req, res) => {
     try {
         const { userId } = req.params;
         const updates = req.body;
-
+        
         // Hash new password if provided
         if (updates.password) {
             const salt = await bcrypt.genSalt(10);
             updates.password = await bcrypt.hash(updates.password, salt);
         }
-
+        
         const updatedUser = await User.findByIdAndUpdate(userId, updates, {
             new: true,
         }).select("-password");
-
+        
         res.status(200).json({ message: "Profile updated", user: updatedUser });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+// Get all users (excluding passwords)
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find().select("-password");
+        res.status(200).json(users);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server error" });

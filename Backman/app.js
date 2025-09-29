@@ -5,6 +5,7 @@ import cors from "cors";
 import { createServer } from "http";
 // import { Server } from "socket.io";
 import { connectDB } from "./lib/db.js";
+import router from "./routes/userroute.js";
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +16,7 @@ const httpServer = createServer(app);
 // Middleware
 app.use(cors());
 app.use(express.json({limit: "4mb"}));
+app.use("/api/auth", router);     // Route setup
 
 
 // Example route

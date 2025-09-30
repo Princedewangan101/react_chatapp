@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { connectDB } from "./lib/db.js";
 import userrouter from "./routes/userroute.js";
 import messageRoutes from "./routes/messageRoute.js";
-import { server } from 'socket.io'
+import { Server } from 'socket.io'
 
 // Load environment variables
 dotenv.config();
@@ -14,27 +14,41 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: "4mb" }));
+app.use("/api/auth", userrouter);     // Route setup
+app.use("/api/messages", messageRoutes)     // Route setup
+
+// Example route
+app.get("/", (req, res) => {
+  res.json({ message: "Server running with ES6 modules 🚀" });
+});
+
+// Connting mongodb
+await connectDB();
+
 // Initialize socket.io
-export const io = new Server(server, {
+export const io = new Server(httpServer, {
   cors: {
     origin: "*", // in production, put your frontend URL
     methods: ["GET", "POST"]
   }
 });
 
-// Online users map: userId → socketId
+// Online users map: {userId : socketId}, Socket handling func.
 const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("New user connected:", socket.id);
 
-  // When user logs in, send their userId
+// 1️⃣ Add user to online users
   socket.on("addUser", (userId) => {
     onlineUsers.set(userId, socket.id);
     console.log("Online users:", onlineUsers);
   });
 
-  // Listen for sending messages
+// 2️⃣ Send message to a specific user
   socket.on("sendMessage", ({ senderId, receiverId, content, type, mediaUrl }) => {
     const receiverSocket = onlineUsers.get(receiverId);
     if (receiverSocket) {
@@ -48,7 +62,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Disconnect
+// 3️⃣ Optional: notify when user disconnects
   socket.on("disconnect", () => {
     for (let [key, value] of onlineUsers) {
       if (value === socket.id) {
@@ -60,24 +74,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: "4mb" }));
-app.use("/api/auth", userrouter);     // Route setup
-app.use("/api/messages", messageRoutes)
-
-// Example route
-app.get("/", (req, res) => {
-  res.json({ message: "Server running with ES6 modules 🚀" });
-});
-
-// Connting mongodb
-await connectDB();
-
 // Start server
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
-
-

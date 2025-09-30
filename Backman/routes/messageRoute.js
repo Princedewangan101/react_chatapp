@@ -11,6 +11,6 @@ messagerouter.post("/:id", protectedRoute, sendMessage)
 messagerouter.put("/:id", protectedRoute, deleteMessage)
 
 // Use `upload.single("file")` to accept one file with field name "file"
-messagerouter.post("/", protectedRoute, upload.single("file"), sendMessage);
+// messagerouter.post("/", protectedRoute, upload.single("file"), sendMessage);
 
 export default messagerouter;

@@ -1,7 +1,7 @@
 import { Message } from "../models/message.js";
 import { User } from "../models/user.js";
 import cloudinary from '../lib/cloudinary.js'
- 
+import { io, onlineUsers } from "../socket.js";
 
 // ✅ Get conversation between logged-in user and another user
 export const getUserFromSidebar = async (req, res) => {
@@ -116,6 +116,18 @@ export const sendMessage = async (req, res) => {
       type: type || (req.file ? "image" : "text"),
       mediaUrl,
     });
+
+    // Emit to receiver if online
+    const receiverSocket = onlineUsers.get(receiverId);
+    if (receiverSocket) {
+      io.to(receiverSocket).emit("getMessage", {
+        senderId: req.user._id,
+        content: newMessage.content,
+        type: newMessage.type,
+        mediaUrl: newMessage.mediaUrl,
+        createdAt: newMessage.createdAt,
+      });
+    }
 
     res.status(201).json({ message: "Message sent", data: newMessage });
   } catch (err) {

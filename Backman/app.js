@@ -37,7 +37,7 @@ export const io = new Server(httpServer, {
 });
 
 // Online users map: {userId : socketId}, Socket handling func.
-const onlineUsers = new Map();
+export const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("New user connected:", socket.id);

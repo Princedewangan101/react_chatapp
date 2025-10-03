@@ -1,15 +1,17 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
+import { AuthContext } from '../context/Authcontext'
 
 const Logincomponent = ({ switchToSignup }) => {
-
+  const { login_n_signup } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    await login_n_signup("login", data);   // comming from Authcontext.
     console.log("Form submitted:", data);
     alert("✅ Sign up successful (check console for data)");
   };
@@ -65,8 +67,8 @@ const Logincomponent = ({ switchToSignup }) => {
         </div>
 
         <div className='text-xs text-center'>
-          <p>Create new account ? 
-            <a onClick={switchToSignup}   className='text-violet-600 font-semibold hover:underline cursor-default'>Sign up</a>
+          <p>Create new account ?
+            <a onClick={switchToSignup} className='text-violet-600 font-semibold hover:underline cursor-default'>Sign up</a>
           </p>
         </div>
 

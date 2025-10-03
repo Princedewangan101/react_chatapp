@@ -1,9 +1,9 @@
 import { Message } from "../models/message.js";
 import { User } from "../models/user.js";
 import cloudinary from '../lib/cloudinary.js'
-import { io, onlineUsers } from "../socket.js";
+import { io, onlineUsers } from "../app.js";
 
-// ✅ Get conversation between logged-in user and another user
+// ✅ Get user fron sidebar read only
 export const getUserFromSidebar = async (req, res) => {
     try {
         const { userId } = req.params; // <-- ID of user clicked in sidebar

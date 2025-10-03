@@ -4,11 +4,11 @@ import { deleteMessage, getMessages, getUserFromSidebar, markAsRead, sendMessage
 
 const messagerouter = express.Router();
 
-messagerouter.get("/user", protectedRoute, getUserFromSidebar)
+messagerouter.get("/users", protectedRoute, getUserFromSidebar)
 messagerouter.get("/:id", protectedRoute, getMessages)
 messagerouter.put("/:id", protectedRoute, markAsRead)
-messagerouter.post("/:id", protectedRoute, sendMessage)
-messagerouter.put("/:id", protectedRoute, deleteMessage)
+messagerouter.put("/mark/:id", protectedRoute, deleteMessage)
+messagerouter.post("/send/:id", protectedRoute, sendMessage)
 
 // Use `upload.single("file")` to accept one file with field name "file"
 // messagerouter.post("/", protectedRoute, upload.single("file"), sendMessage);

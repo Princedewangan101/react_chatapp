@@ -7,12 +7,13 @@ import Rightsidebar from "../components/Rightsidebar"
 
 import bg from "../assets/bg.jpg";
 import Brand from '../components/Brand';
+import { Chatcontext } from '../../context/Chatcontext';
 
 
 
 const Homepage = () => {
 
-    const [selectedUser, setSelectedUser] = useState(false)
+    const {selectedUser} = useContext(Chatcontext)
 
     return (
 

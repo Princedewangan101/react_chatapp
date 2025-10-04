@@ -7,7 +7,7 @@ export const chatProvider = ({ children }) => {
 
     const [message, setMessage] = useState([]);
     const [users, setUsers] = useState([]);   // allthe users in sidebar
-    const [selectedUser, setselectedUser] = useState(null); // selected user of side bar
+    const [selected_user_context, setselected_user_context] = useState(null); // selected user of side bar
     const [unseenMessage, setunseenMessage] = useState({});  // 
 
     const { socket, axios } = useContext(AuthContext);
@@ -18,7 +18,7 @@ export const chatProvider = ({ children }) => {
             const { data } = await axios.get("/api/messages/users");
             if (data.success) {
                 setUsers(data.users);
-                setselectedUser(data.unseenMessage);
+                setselected_user_context(data.unseenMessage);
             }
         } catch (error) {
             toast.error(error.message)
@@ -30,7 +30,7 @@ export const chatProvider = ({ children }) => {
             const { data } = await axios.get(`/api/messages/${userId}`);
             if (data.success) {
                 setMessage(data.messages);
-                setselectedUser(data.unseenMessage);
+                setselected_user_context(data.unseenMessage);
             }
         } catch (error) {
             toast.error(error.message)
@@ -39,7 +39,7 @@ export const chatProvider = ({ children }) => {
     //   func. to get message from selected user in sidebar. 
     const sendMessages = async (messagedata) => {
         try {
-            const { data } = await axios.post(`/api/messages/send/${selectedUser._Id}`, messagedata);
+            const { data } = await axios.post(`/api/messages/send/${selected_user_context._Id}`, messagedata);
             if (data.success) {
                 setMessage((pervMessage) => [...pervMessage, data.newMessage]);
             } else {
@@ -55,7 +55,7 @@ export const chatProvider = ({ children }) => {
             if (!socket) return;
 
             socket.on("newMessage", (newMessage) => {
-                if (selectedUsers && newMessage.senderId === selectedUsers._Id) {
+                if (selected_user_contexts && newMessage.senderId === selected_user_contexts._Id) {
                     newMessage.isRead = true;
                     setMessage((pervMessage) => [...pervMessage, newMessage]);
                     axios.put(`/api/messages/mark/${newMessage._Id}`);
@@ -81,10 +81,10 @@ export const chatProvider = ({ children }) => {
     useEffect(() => {
         subscribeMessage();
         return () => unsubscribeMessage();
-    }, [socket, selectedUser])
+    }, [socket, selected_user_context])
 
     const value = {
-       message, users, selectedUser, unseenMessage, getUsers, getMessages, sendMessages, subscribeMessage, unsubscribeMessage
+       message, users, selected_user_context, unseenMessage, getUsers, getMessages, sendMessages, subscribeMessage, unsubscribeMessage
     }
     return (
         <Chatcontext.Provider value="{value}">

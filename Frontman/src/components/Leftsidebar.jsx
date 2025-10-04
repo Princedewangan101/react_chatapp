@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import srh from '../assets/search_icon.png'
 import logo from '../assets/logo_icon.svg'
 import menu from '../assets/menu_icon.png'
 import martin from '../assets/profile_martin.png'
-import assets, { userDummyData } from '../assets/assets'
+import assets from '../assets/assets'
+import { AuthContext } from '../../context/Authcontext'
+import { Chatcontext } from '../../context/Chatcontext'
 
-const Leftsidebar = ({ onUserClick, selectedUser, setSelectedUser }) => {
+const Leftsidebar = ({ selectedUser, setSelectedUser, selected_user_context }) => {
+
+  const { message, users, selected_user_context, unseenMessage, setunseenMessage, getUsers, getMessages, sendMessages, subscribeMessage, unsubscribeMessage } = useContext(Chatcontext)
+  const { logout, onlineUsers } = useContext(AuthContext)
+  const [input, setinput] = useState(false)
+
+  const filteredUser = input ? users.filter((user) => user.fullname.toLowerCase().includes(input.toLowerCase())) : users
+
+  useEffect(() => {
+    getUsers();
+  }, [onlineUsers])
+
   return (
     <section className='h-full '>
       {/* -----------quict chat section section and logo -------------       */}
@@ -34,18 +47,22 @@ const Leftsidebar = ({ onUserClick, selectedUser, setSelectedUser }) => {
           className='w-4 '
         />
         <input
+          onChange={(e) => setinput(e.target.value)}
           type="text"
           placeholder="Search..."
           className="  outline-none"
         />
       </div>
-      {/* -----------friends profile -------------       */}
+      {/* -----------friends profile -------------*/}
 
       <div className='mx-2 my-5 '>
-        {userDummyData.map((user, index) => (
+        {filteredUser.map((user, index) => (
           <div
             key={index}
-            onClick={() => setSelectedUser(user)}
+            onClick={() => {
+              setSelectedUser(user);
+              setunseenMessage(prev =>({...prev, [user._id]:0}))
+            }}
             className={`c flex rounded-lg gap-3 px-2 py-2 hover:bg-slate-700/30 ${selectedUser?._id === user._id ? 'bg-slate-700/30' : ''} `}>
 
             <img
@@ -56,10 +73,10 @@ const Leftsidebar = ({ onUserClick, selectedUser, setSelectedUser }) => {
             <div className=' flex flex-col '>
               <p className='text-sm'>{user.fullName}</p>
               {
-                index < 3 ? <span className='text-xs'>online</span> : <span className='text-xs'>offline</span>
+                onlineUsers.includes(user._id) ? <span className='text-xs'>online</span> : <span className='text-xs'>offline</span>
               }
             </div>
-            {index > 2 && <p>{index}</p>}
+            {unseenMessage[user._id] > 0 && <p>{unseenMessage[user._id]}</p>}
           </div>
         ))}
         {/* --------------------------------- */}
